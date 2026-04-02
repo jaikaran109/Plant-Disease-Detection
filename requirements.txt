@@ -1,8 +1,8 @@
-tensorflow
+tensorflow-cpu==2.21.0
 numpy
 pandas
 matplotlib
-opencv-python
+opencv-python-headless
 scikit-learn
 streamlit
 Pillow
