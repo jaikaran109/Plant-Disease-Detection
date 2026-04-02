@@ -5,6 +5,5 @@ opencv-python-headless
 scikit-learn
 streamlit
 Pillow
-keras
 h5py
-tensorflow-cpu
+tensorflow==2.15.0
