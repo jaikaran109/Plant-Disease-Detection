@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomato Plant Disease Detector</title>
+    <meta name="description" content="Tomato Plant Disease Detector project website">
+    <style>
+        :root {
+            --green: #2f7d32;
+            --green-dark: #245f27;
+            --green-light: #eaf6ea;
+            --white: #ffffff;
+            --bg: #f7fbf7;
+            --text: #1f2d1f;
+            --muted: #5d6d5d;
+            --border: #d8e6d8;
+            --max-width: 1000px;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            width: min(calc(100% - 2rem), var(--max-width));
+            margin: 0 auto;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-row {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1rem 0;
+        }
+
+        .brand {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--green-dark);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav a {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .menu-toggle {
+            display: none;
+            padding: 0.55rem 0.8rem;
+            border: 1px solid var(--border);
+            background: var(--white);
+            color: var(--green-dark);
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 0.8rem 1.2rem;
+            background: var(--green);
+            color: var(--white);
+            border-radius: 6px;
+            font-weight: 700;
+        }
+
+        .hero {
+            padding: 4rem 0 2.5rem;
+        }
+
+        .hero-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .hero h1,
+        .section h2 {
+            color: var(--green-dark);
+        }
+
+        .hero h1 {
+            margin: 0 0 1rem;
+            font-size: 2.4rem;
+        }
+
+        .hero p,
+        .section-copy,
+        .card p,
+        .simple-list li {
+            color: var(--muted);
+        }
+
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .leaf-illustration {
+            position: relative;
+            width: 230px;
+            height: 230px;
+        }
+
+        .leaf-main {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 135px;
+            height: 185px;
+            background: var(--green);
+            border: 3px solid var(--green-dark);
+            border-radius: 0 85% 0 85%;
+            transform: translate(-50%, -55%) rotate(-45deg);
+        }
+
+        .leaf-main::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 12px;
+            width: 4px;
+            height: 145px;
+            background: var(--green-dark);
+            transform: translateX(-50%) rotate(45deg);
+            transform-origin: top center;
+        }
+
+        .leaf-main::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -28px;
+            width: 6px;
+            height: 42px;
+            background: var(--green-dark);
+            border-radius: 6px;
+            transform: translateX(-50%) rotate(45deg);
+        }
+
+        .leaf-vein {
+            position: absolute;
+            width: 44px;
+            height: 3px;
+            background: var(--green-dark);
+            border-radius: 3px;
+        }
+
+        .vein-one {
+            left: 106px;
+            top: 78px;
+            transform: rotate(-22deg);
+        }
+
+        .vein-two {
+            left: 118px;
+            top: 106px;
+            transform: rotate(18deg);
+        }
+
+        .vein-three {
+            left: 82px;
+            top: 122px;
+            transform: rotate(-18deg);
+        }
+
+        .vein-four {
+            left: 94px;
+            top: 150px;
+            transform: rotate(20deg);
+        }
+
+        .section {
+            padding: 2.5rem 0;
+        }
+
+        .section-head {
+            margin-bottom: 1rem;
+        }
+
+        .card,
+        .footer {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        .card {
+            padding: 1.2rem;
+        }
+
+        .steps-grid,
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .step-icon {
+            width: 46px;
+            height: 46px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--green-light);
+            color: var(--green-dark);
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+
+        .simple-list {
+            margin: 0;
+            padding-left: 1.2rem;
+        }
+
+        .simple-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .team-list p {
+            margin: 0.35rem 0;
+        }
+
+        .footer {
+            margin-top: 1rem;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        @media (max-width: 800px) {
+            .menu-toggle {
+                display: inline-block;
+            }
+
+            .nav {
+                position: absolute;
+                top: calc(100% + 0.5rem);
+                left: 0;
+                right: 0;
+                display: none;
+                flex-direction: column;
+                align-items: flex-start;
+                background: var(--white);
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                padding: 1rem;
+            }
+
+            .nav.open {
+                display: flex;
+            }
+
+            .steps-grid,
+            .results-grid,
+            .hero-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-visual {
+                margin-top: 0.5rem;
+            }
+        }
+
+        :root {
+            --green: #00ff88;
+            --green-dark: #00ff88;
+            --green-light: rgba(0, 255, 136, 0.08);
+            --white: #ffffff;
+            --bg: #0a0a0a;
+            --text: #ffffff;
+            --muted: #b8c5bd;
+            --border: rgba(0, 255, 136, 0.15);
+            --max-width: 1120px;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(0, 255, 136, 0.14), transparent 28%),
+                radial-gradient(circle at 85% 10%, rgba(0, 255, 136, 0.08), transparent 18%),
+                var(--bg);
+            color: var(--text);
+        }
+
+        header,
+        main,
+        footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(24px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: var(--delay, 0s);
+        }
+
+        .site-header {
+            background: rgba(10, 10, 10, 0.82);
+            border-bottom: 1px solid rgba(0, 255, 136, 0.08);
+            backdrop-filter: blur(12px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            color: var(--white);
+        }
+
+        .brand-mark {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 14px;
+            color: var(--green);
+            border: 1px solid var(--border);
+            background: rgba(0, 255, 136, 0.08);
+            box-shadow: 0 0 16px rgba(0, 255, 136, 0.28);
+            font-size: 0.95rem;
+        }
+
+        .brand-copy {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+        }
+
+        .brand-copy small {
+            color: var(--muted);
+            font-size: 0.72rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .nav a {
+            color: var(--muted);
+            transition: color 0.2s ease, text-shadow 0.2s ease;
+        }
+
+        .nav a:hover,
+        .nav a:focus-visible {
+            color: var(--white);
+            text-shadow: 0 0 12px rgba(0, 255, 136, 0.45);
+        }
+
+        .menu-toggle {
+            border-color: var(--border);
+            background: rgba(0, 255, 136, 0.06);
+            color: var(--white);
+            border-radius: 14px;
+        }
+
+        .hero,
+        .section {
+            padding: 1.4rem 0 2rem;
+        }
+
+        .hero {
+            padding-top: 4rem;
+        }
+
+        .hero-layout,
+        .stats-grid,
+        .about-grid,
+        .workflow-grid,
+        .features-grid,
+        .team-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .hero-layout {
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 1.25rem;
+        }
+
+        .stats-grid,
+        .workflow-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .about-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .features-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .team-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .hero-panel,
+        .hero-visual-card,
+        .card,
+        .footer-shell {
+            background: linear-gradient(180deg, rgba(18, 24, 21, 0.92), rgba(10, 14, 12, 0.96));
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.42), 0 0 26px rgba(0, 255, 136, 0.1);
+        }
+
+        .hero-panel,
+        .hero-visual-card {
+            padding: 2rem;
+        }
+
+        .eyebrow,
+        .pill,
+        .tag,
+        .uni-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.45rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(0, 255, 136, 0.08);
+            border: 1px solid var(--border);
+        }
+
+        .eyebrow {
+            font-size: 0.78rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .hero-panel h1,
+        .section h2 {
+            color: var(--white);
+        }
+
+        .hero-panel h1 {
+            font-size: clamp(2.6rem, 6vw, 4.8rem);
+            line-height: 0.96;
+            margin: 1rem 0;
+            max-width: 12ch;
+        }
+
+        .hero-panel p,
+        .card p,
+        .section-copy {
+            color: var(--muted);
+        }
+
+        .hero-actions,
+        .hero-pills,
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .hero-actions {
+            margin: 1.6rem 0 1.2rem;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 160px;
+            padding: 0.9rem 1.2rem;
+            border-radius: 16px;
+            border: 1px solid transparent;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .button.primary {
+            background: var(--green);
+            color: #032113;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.28);
+        }
+
+        .button.secondary {
+            background: rgba(0, 255, 136, 0.06);
+            border-color: var(--border);
+            color: var(--white);
+        }
+
+        .button:hover,
+        .button:focus-visible {
+            transform: translateY(-3px);
+            animation: pulse 1.1s ease infinite;
+        }
+
+        .hero-visual-card {
+            min-height: 380px;
+            position: relative;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+        }
+
+        .hero-visual-card::before,
+        .hero-visual-card::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(42px);
+        }
+
+        .hero-visual-card::before {
+            width: 220px;
+            height: 220px;
+            top: 40px;
+            right: 30px;
+            background: rgba(0, 255, 136, 0.15);
+        }
+
+        .hero-visual-card::after {
+            width: 260px;
+            height: 260px;
+            left: -40px;
+            bottom: -60px;
+            background: rgba(0, 255, 136, 0.08);
+        }
+
+        .orb {
+            width: 260px;
+            height: 260px;
+            display: grid;
+            place-items: center;
+            border-radius: 36px;
+            background: rgba(0, 255, 136, 0.06);
+            border: 1px solid var(--border);
+            transform: rotate(10deg);
+        }
+
+        .leaf {
+            width: 100px;
+            height: 160px;
+            border-radius: 0 80% 0 80%;
+            background: linear-gradient(160deg, #2cff9e, #0d7f4d);
+            transform: rotate(-45deg);
+            box-shadow: 0 0 36px rgba(0, 255, 136, 0.25);
+        }
+
+        .visual-note {
+            position: absolute;
+            right: 1rem;
+            bottom: 1rem;
+            max-width: 210px;
+            padding: 0.95rem;
+            border-radius: 18px;
+            background: rgba(8, 12, 10, 0.92);
+            border: 1px solid var(--border);
+        }
+
+        .card {
+            padding: 1.35rem;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        }
+
+        .card:hover,
+        .card:focus-within {
+            transform: translateY(-6px);
+            border-color: rgba(0, 255, 136, 0.33);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.42), 0 0 28px rgba(0, 255, 136, 0.18);
+        }
+
+        .stat-card {
+            text-align: center;
+        }
+
+        .stat-number,
+        .step-number {
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+            color: var(--green);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            margin-bottom: 0.25rem;
+            text-shadow: 0 0 18px rgba(0, 255, 136, 0.35);
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 0.8rem;
+            border-radius: 14px;
+            background: rgba(0, 255, 136, 0.08);
+            border: 1px solid var(--border);
+        }
+
+        .team-top {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .team-card small {
+            display: block;
+            color: var(--green);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 0.35rem;
+        }
+
+        .footer {
+            background: transparent;
+            border: 0;
+            padding: 1rem 0 2rem;
+        }
+
+        .footer-shell {
+            padding: 1.2rem;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        @keyframes pulse {
+            50% {
+                box-shadow: 0 0 0 12px rgba(0, 255, 136, 0);
+            }
+        }
+
+        @media (max-width: 980px) {
+            .hero-layout,
+            .about-grid,
+            .features-grid,
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .nav {
+                top: calc(100% + 0.75rem);
+                background: #0d1210;
+                border-color: var(--border);
+                border-radius: 20px;
+                box-shadow: 0 18px 45px rgba(0, 0, 0, 0.42);
+            }
+
+            .stats-grid,
+            .workflow-grid,
+            .features-grid,
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-panel,
+            .hero-visual-card,
+            .card {
+                padding: 1.2rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+            }
+
+            .team-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .visual-note {
+                left: 1rem;
+                right: 1rem;
+                max-width: none;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+
+            .fade-in {
+                opacity: 1;
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-row">
+            <a class="brand" href="#top" aria-label="Tomato Plant Disease Detector home">
+                <span class="brand-mark">TP</span>
+                <span class="brand-copy">
+                    <strong>Tomato Plant Disease Detector</strong>
+                    <small>Green Vision AI</small>
+                </span>
+            </a>
+
+            <nav class="nav" id="nav">
+                <a href="#about">About</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#features">Features</a>
+                <a href="#team">Team</a>
+                <a href="http://localhost:8501" target="_blank" rel="noreferrer">Try Now</a>
+            </nav>
+
+            <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+        </div>
+    </header>
+
+    <main id="top">
+        <section class="hero fade-in" style="--delay: 0.05s;">
+            <div class="container">
+                <div class="hero-layout">
+                    <div class="hero-panel">
+                        <span class="eyebrow">GLA University Project</span>
+                        <h1>Tomato Plant Disease Detector</h1>
+                        <p>
+                            AI-based detection of tomato leaf diseases using image classification.
+                            This project helps detect tomato plant diseases from leaf images and gives
+                            quick results with treatment suggestions.
+                        </p>
+                        <div class="hero-actions">
+                            <a class="button primary" href="http://localhost:8501" target="_blank" rel="noreferrer">Try Now</a>
+                            <a class="button secondary" href="#about">Explore Project</a>
+                        </div>
+                        <div class="hero-pills">
+                            <span class="pill">10 Disease Classes</span>
+                            <span class="pill">88.31% Accuracy</span>
+                            <span class="pill">PlantVillage Dataset</span>
+                        </div>
+                    </div>
+                    <div class="hero-visual-card" aria-hidden="true">
+                        <div class="orb">
+                            <div class="leaf"></div>
+                        </div>
+                        <div class="visual-note">
+                            <strong>Instant AI Screening</strong>
+                            <p>A trained model analyzes uploaded tomato leaf images and predicts the disease class in moments.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section fade-in" style="--delay: 0.15s;" aria-label="Project stats">
+            <div class="container">
+                <div class="stats-grid">
+                    <article class="card stat-card">
+                        <div class="stat-number">10</div>
+                        <h3>10 Disease Classes</h3>
+                        <p>Trained to recognize ten tomato leaf disease categories from uploaded images.</p>
+                    </article>
+                    <article class="card stat-card">
+                        <div class="stat-number">88.31%</div>
+                        <h3>88.31% Accuracy</h3>
+                        <p>Validated project accuracy for dependable learning and demonstration use.</p>
+                    </article>
+                    <article class="card stat-card">
+                        <div class="stat-number">Fast</div>
+                        <h3>Instant Results</h3>
+                        <p>Predictions and treatment suggestions are shown without a long waiting time.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section fade-in" id="about" style="--delay: 0.25s;">
+            <div class="container">
+                <div class="section-head">
+                    <h2>About The Project</h2>
+                    <p class="section-copy">
+                        The system is useful for learning, demonstration, and basic crop health awareness,
+                        while showing how AI can support faster plant disease detection.
+                    </p>
+                </div>
+                <div class="about-grid">
+                    <article class="card">
+                        <h3>AI Technology Used</h3>
+                        <p>
+                            A trained AI model studies uploaded leaf images, compares them with learned disease
+                            patterns, and predicts the most likely class. Python and OpenCV support the image
+                            processing pipeline behind the prediction flow.
+                        </p>
+                        <div class="tag-row">
+                            <span class="tag">MobileNetV2</span>
+                            <span class="tag">TensorFlow</span>
+                            <span class="tag">Keras</span>
+                            <span class="tag">Streamlit</span>
+                            <span class="tag">PlantVillage</span>
+                        </div>
+                    </article>
+                    <article class="card">
+                        <h3>Why It Matters</h3>
+                        <p>
+                            Early disease identification can help people respond sooner, understand crop health
+                            risks, and explore treatment guidance with more confidence. The interface is designed
+                            to stay simple while still giving quick results and practical recommendations.
+                        </p>
+                        <div class="tag-row">
+                            <span class="tag">Quick Results</span>
+                            <span class="tag">Treatment Suggestions</span>
+                            <span class="tag">Crop Awareness</span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section fade-in" id="how-it-works" style="--delay: 0.35s;">
+            <div class="container">
+                <div class="section-head">
+                    <h2>How It Works</h2>
+                    <p class="section-copy">Upload, analyze, and receive the diagnosis with next-step guidance.</p>
+                </div>
+                <div class="workflow-grid">
+                    <article class="card">
+                        <div class="step-number">01</div>
+                        <h3>Upload Image</h3>
+                        <p>Upload a clear image of a tomato leaf so the model can inspect the visible disease patterns.</p>
+                    </article>
+                    <article class="card">
+                        <div class="step-number">02</div>
+                        <h3>AI Analyzes</h3>
+                        <p>The model processes the image and compares it against the trained disease classes.</p>
+                    </article>
+                    <article class="card">
+                        <div class="step-number">03</div>
+                        <h3>Get Treatment</h3>
+                        <p>The app shows the predicted disease and treatment recommendation.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section fade-in" id="features" style="--delay: 0.45s;">
+            <div class="container">
+                <div class="section-head">
+                    <h2>Core Features</h2>
+                    <p class="section-copy">Everything important from the project is surfaced in fast, readable cards.</p>
+                </div>
+                <div class="features-grid">
+                    <article class="card">
+                        <h3>10 Diseases</h3>
+                        <p>The model is built to classify ten tomato disease categories from leaf imagery.</p>
+                    </article>
+                    <article class="card">
+                        <h3>88% Accuracy</h3>
+                        <p>Performance reaches 88.31% accuracy, giving the app a solid baseline for learning and demonstration.</p>
+                    </article>
+                    <article class="card">
+                        <h3>Treatment Guide</h3>
+                        <p>Predictions are paired with treatment recommendations to make the result more useful.</p>
+                    </article>
+                    <article class="card">
+                        <h3>Fast Results</h3>
+                        <p>The Streamlit-based interface keeps the upload-to-result flow quick and simple.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section fade-in" id="team" style="--delay: 0.55s;">
+            <div class="container">
+                <div class="team-top">
+                    <div class="section-head">
+                        <h2>Project Team</h2>
+                        <p class="section-copy">The project was developed at GLA University, Mathura, with faculty guidance.</p>
+                    </div>
+                    <span class="uni-pill">GLA University</span>
+                </div>
+                <div class="team-grid">
+                    <article class="card team-card">
+                        <small>Team Member</small>
+                        <h3>Ayush Chauhan</h3>
+                        <p>Project contributor for the Tomato Plant Disease Detector initiative.</p>
+                    </article>
+                    <article class="card team-card">
+                        <small>Team Member</small>
+                        <h3>Jai Karan Gupta</h3>
+                        <p>Project contributor for the Tomato Plant Disease Detector initiative.</p>
+                    </article>
+                    <article class="card team-card">
+                        <small>Team Member</small>
+                        <h3>Kakul Mittal</h3>
+                        <p>Project contributor for the Tomato Plant Disease Detector initiative.</p>
+                    </article>
+                    <article class="card team-card">
+                        <small>Team Member</small>
+                        <h3>Vanya Kulshreshtha</h3>
+                        <p>Project contributor for the Tomato Plant Disease Detector initiative.</p>
+                    </article>
+                    <article class="card team-card">
+                        <small>Team Member</small>
+                        <h3>Yuvraj Singh</h3>
+                        <p>Project contributor for the Tomato Plant Disease Detector initiative.</p>
+                    </article>
+                    <article class="card team-card">
+                        <small>Supervisor</small>
+                        <h3>Dr. Abhay Pratap Singh Bhadauria</h3>
+                        <p>Faculty supervisor supporting the project at GLA University, Mathura.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer fade-in" style="--delay: 0.65s;">
+        <div class="container">
+            <div class="footer-shell">Tomato Plant Disease Detector Project | GLA University</div>
+        </div>
+    </footer>
+
+    <script>
+        const menuToggle = document.getElementById("menu-toggle");
+        const nav = document.getElementById("nav");
+        const links = nav.querySelectorAll("a");
+
+        menuToggle.addEventListener("click", () => {
+            const isOpen = nav.classList.toggle("open");
+            menuToggle.setAttribute("aria-expanded", String(isOpen));
+            menuToggle.textContent = isOpen ? "Close" : "Menu";
+        });
+
+        links.forEach((link) => {
+            link.addEventListener("click", () => {
+                nav.classList.remove("open");
+                menuToggle.setAttribute("aria-expanded", "false");
+                menuToggle.textContent = "Menu";
+            });
+        });
+    </script>
+</body>
+</html>
