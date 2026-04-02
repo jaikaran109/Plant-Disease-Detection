@@ -1,9 +1,9 @@
-tensorflow
+tensorflow==2.21.0
 numpy
 pandas
 matplotlib
 opencv-python-headless
 scikit-learn
-streamlit
+streamlit==1.55.0
 Pillow
 h5py
