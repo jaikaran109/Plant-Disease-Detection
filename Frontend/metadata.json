@@ -1,5 +1,0 @@
-{
-  "name": "DrishtiAI - Smart Vision for Healthy Crops",
-  "description": "Modern AI-powered plant disease detection platform built with Vanilla HTML, CSS, and JavaScript for maximum clarity and performance.",
-  "requestFramePermissions": ["camera"]
-}
